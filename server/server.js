@@ -8,13 +8,13 @@ import historyApiFallback from 'connect-history-api-fallback';
 import Database from '../graphql/Database';
 import createGraphQlServer from './graphQlServer';
 
+
 const IMAGE_PORT = 9000;
-const GRAPHQL_PORT = 8080;
+const GRAPHQL_PORT = 8081;
 const RELAY_PORT = 3000;
 
 createGraphQlServer(GRAPHQL_PORT, new Database());
 
-// __dirname is {projectRoot}/server, so we have to step one directory up
 const pathBase = path.resolve(__dirname, '../');
 
 const imageServer = express();
@@ -36,11 +36,7 @@ app.get(/images\/.{1,}/i, function(req, res) {
 });
 
 if (!process.env.PRODUCTION) {
-  /*************************************************************
-   *
-   * Webpack Dev Middleware with hot reload
-   *
-   *************************************************************/
+
 
   const webpack = require('webpack');
   const config = require('../webpack.local.config.js');
@@ -68,12 +64,6 @@ if (!process.env.PRODUCTION) {
 
 }
 else {
-  /******************
-   *
-   * Express server
-   *
-   *****************/
-
   const port = process.env.PORT || 3000;
   const server = app.listen(port, () => {
     const host = server.address().address;

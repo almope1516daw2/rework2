@@ -3,7 +3,7 @@ import {ROLES} from '../../config';
 
 const user1 = new User({
   id: '1',
-  role: ROLES.reader,
+  role: ROLES.logged,
   email: 'reader@test.com',
   password: 'qwerty',
   firstName: 'Regina',
@@ -12,7 +12,7 @@ const user1 = new User({
 
 const user2 = new User({
   id: '2',
-  role: ROLES.publisher,
+  role: ROLES.logged,
   email: 'publisher@test.com',
   password: 'qwerty',
   firstName: 'Peter',
@@ -21,7 +21,7 @@ const user2 = new User({
 
 const user3 = new User({
   id: '3',
-  role: ROLES.publisher,
+  role: ROLES.logged,
   email: 'publisher2@test.com',
   password: 'qwerty',
   firstName: 'Peter',

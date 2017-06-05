@@ -28,37 +28,8 @@ function _logout (user) {
 function getUserMenu (props, router) {
   const user = props.viewer.user ? props.viewer.user : {};
 
-  if (user.role === ROLES.publisher || user.role === ROLES.admin) {
-    return (
-      <IconMenu
-        iconButtonElement={ <IconButton><PersonIcon /></IconButton> }
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-      >
-
-        <MenuItem
-          primaryText="Profile"
-          onClick={() => router.push('/user')} />
-
-        <MenuItem
-          primaryText="Create Post"
-          onClick={() => router.push('/user/post/create')} />
-
-        {user.posts.edges.length > 0 ?
-          <MenuItem
-            primaryText="My Posts"
-            onClick={() => router.push('/user/posts')}/> :
-          undefined
-        }
-
-        <MenuItem
-          primaryText="Logout"
-          onClick={() => _logout(user)} />
-
-      </IconMenu>
-    )
-  }
-  else if (user.role === ROLES.reader) {
+  // ROLES
+  /*if (user.role === ROLES.logged) {
     return (
       <IconMenu
         iconButtonElement={ <IconButton><PersonIcon /></IconButton> }
@@ -77,7 +48,7 @@ function getUserMenu (props, router) {
       </IconMenu>
     );
   }
-  else if (user.role === ROLES.anonymous) {
+  else if (user.role === ROLES.anonymous) {*/
     return (
       <IconButton
         onClick={() => router.push('/login')}
@@ -85,7 +56,7 @@ function getUserMenu (props, router) {
         <PersonIcon />
       </IconButton>
     )
-  }
+  //}
 }
 
 const Header = (props, context) => (
@@ -108,9 +79,6 @@ export default Relay.createContainer(Header, {
           firstName,
           lastName,
           role,
-          posts (first: 1) {
-            edges
-          },
           ${LogoutMutation.getFragment('user')}
         },
       }

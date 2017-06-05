@@ -1,10 +1,8 @@
 import { nodeDefinitions, fromGlobalId } from "graphql-relay";
 
 import UserType from '../type/UserType';
-import PostType from '../type/PostType';
 
 import User from '../../data/model/User';
-import Post from '../../data/model/Post';
 
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId, { db }) => {
@@ -16,8 +14,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
         log('NodeInterface: get user with id ' + id);
         return db.getViewerById(id);
 
-      case 'Post':
-        return db.getPost(id);
 
       default:
         return null;
@@ -27,9 +23,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj instanceof User) {
       return UserType;
     }
-    else if (obj instanceof Post) {
-      return PostType;
-    }
+
   }
 );
 

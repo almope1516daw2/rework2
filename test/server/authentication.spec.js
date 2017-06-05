@@ -8,7 +8,7 @@ describe('Authentication', () => {
   it('creates a token for a registered user', () => {
     const userData = {
       userId: 'id1',
-      role: 'reader'
+      role: 'logged'
     };
 
     const token = createToken(userData);
@@ -22,7 +22,7 @@ describe('Authentication', () => {
   it('creates a token for an anonymous user if user id is not given', () => {
     const userData = {
       name: 'name1',
-      role: 'reader',
+      role: 'logged',
     };
 
     const token = createToken(userData);

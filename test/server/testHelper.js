@@ -74,12 +74,10 @@ global.checkRequestErrors = function (res) {
 global.login = function (role, server, next) {
   let email;
 
-  if (role == ROLES.reader) {
+  if (role == ROLES.logged) {
     email = 'reader@test.com';
   }
-  else if (role === ROLES.publisher) {
-    email = 'publisher@test.com';
-  }
+
 
   expect(email, 'provided role for login has been mapped to an email').to.be.ok;
 

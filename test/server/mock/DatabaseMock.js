@@ -3,37 +3,17 @@ import {toGlobalId, fromGlobalId} from 'graphql-relay';
 import {ROLES, Errors} from '../../../config';
 
 import User from '../../../data/model/User';
-import Post from '../../../data/model/Post';
 
-import {posts} from './testData/posts';
 import {users} from './testData/users';
 
 export default class Database {
 
-  static mockPost1 = posts[0];
-  static mockPost2 = posts[1];
-  static mockPosts = posts;
   static viewerId = 'qoyciemasklfhkel';
 
-  createPost({creatorId, title, image, description}) {
-    const id = posts.length + 1;
-    const newPost = new Post({creatorId, id, title, image, description});
-    posts.push(newPost);
-    return newPost;
-  }
 
-  getPost(id) {
-    return posts.find(post => post.id === id);
-  }
 
-  getPosts() {
-    return posts;
-  }
 
-  getPostsForCreator(id) {
-    const userPosts = posts.filter(post => post.creatorId === id);
-    return userPosts ? userPosts : [];
-  }
+
 
   getAnonymousUser() {
     return new User({id: Database.viewerId, role: ROLES.anonymous});

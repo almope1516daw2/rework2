@@ -9,100 +9,15 @@ import {decodeToken} from '../../../server/authentication';
 describe('GraphQL User', () => {
 
   let database;
-  let mockPosts, mockPost1, mockPost2;
   let server;
 
   beforeEach(() => {
-    mockPosts = Database.mockPosts;
-    mockPost1 = Database.mockPost1;
-    mockPost2 = Database.mockPost2;
     database = new Database();
     server = createGraphQlServer(8080, database);
   });
 
   afterEach((done) => {
     server.close(done);
-  });
-
-  describe('createPost', () => {
-
-    it('creates a new user', (done) => {
-      const query = `
-        mutation {
-          register(input: {
-                      email: "new@test.com",
-                      password: "1234asdf",
-                      firstName: "Fritz",
-                      lastName: "Franz",
-                      role: "${ROLES.reader}",
-                      clientMutationId: "0"
-          }) {
-            user {
-              id,
-              email,
-              role
-            }
-          }
-        }
-      `;
-
-      request(server)
-        .post('/graphql')
-        .query({query})
-        .expect(200)
-        .end((err, res) => {
-          checkRequestErrors(res);
-
-          const user = withActualId(res.body.data.register.user);
-          const error = res.body.data.register.error;
-
-          expect(user, 'user data exists in response').to.be.ok;
-          expect(error, 'no error in response').to.be.not.ok;
-
-          expect(user.id).to.equal("3");
-          expect(user.email).to.equal('new@test.com');
-          expect(user.role).to.equal(ROLES.reader);
-
-          done();
-        });
-    });
-
-    it('returns error if user with same email already exists', (done) => {
-      const query = `
-        mutation {
-          register (input: {
-                      email: "reader@test.com",
-                      password: "1234asdf",
-                      firstName: "Hans",
-                      lastName: "Franz",
-                      role: "${ROLES.reader}",
-                      clientMutationId: "0"
-          }) {
-            user {
-              id,
-              email
-            }
-          }
-        }
-      `;
-
-      request(server)
-        .post('/graphql')
-        .query({query})
-        .expect(200)
-        .end((err, res) => {
-          const data = res.body.data.createPost;
-          const errors = res.body.errors;
-
-          expect(data, 'no user data in response').to.not.be.ok;
-          expect(errors, 'error exists').to.be.ok;
-          expect(errors.length, 'exactly one error exists').to.equal(1);
-          expect(errors[0].message, 'correct error message').to.deep.equal(Errors.EmailAlreadyTaken);
-
-          done();
-        });
-
-    });
   });
 
   describe('login', () => {
@@ -168,7 +83,7 @@ describe('GraphQL User', () => {
           expect(authToken, 'auth token has been set').to.be.ok;
 
           const tokenData = decodeToken(authToken);
-          expect(tokenData.role, 'role in token is set correctly').to.equal(ROLES.reader);
+          expect(tokenData.role, 'role in token is set correctly').to.equal(ROLES.logged);
           expect(tokenData.userId, 'user id is set correctly').to.equal('1');
 
           done();
@@ -200,7 +115,7 @@ describe('GraphQL User', () => {
           expect(authToken, 'auth token has been set').to.be.ok;
 
           const tokenData = decodeToken(authToken);
-          expect(tokenData.role, 'role in token is set correctly').to.equal(ROLES.reader);
+          expect(tokenData.role, 'role in token is set correctly').to.equal(ROLES.logged);
 
           done();
         });
@@ -303,7 +218,7 @@ describe('GraphQL User', () => {
 
       const user = request.agent(server);
 
-      login(ROLES.reader, user, () => {
+      login(ROLES.logged, user, () => {
         const query = `
           mutation {
             logout(input: {id: "${Database.viewerId}", clientMutationId: "0"}) {
@@ -341,7 +256,7 @@ describe('GraphQL User', () => {
 
       const user = request.agent(server);
 
-      login(ROLES.reader, user, () => {
+      login(ROLES.logged, user, () => {
 
         const query = `
           {
@@ -401,21 +316,13 @@ describe('GraphQL User', () => {
 
       const user = request.agent(server);
 
-      login(ROLES.publisher, user, () => {
+      login(ROLES.logged, user, () => {
 
         const query = `
           {
             viewer {
               user {
-                id,
-                posts (first: 100) {
-                  edges {
-                    node {
-                      creatorId,
-                      title
-                    }
-                  }
-                }
+                id
               }
             }
           }
@@ -428,10 +335,7 @@ describe('GraphQL User', () => {
             checkRequestErrors(res);
 
             const userData = res.body.data.viewer.user;
-            const posts = userData.posts.edges;
-            expect(posts.length).to.equal(5);
 
-            posts.forEach(post => expect(post.creatorId).to.equal(userData.userId));
 
 
             done();
@@ -446,15 +350,7 @@ describe('GraphQL User', () => {
         {
           viewer {
             user {
-              id,
-              posts (first: 100) {
-                edges {
-                  node {
-                    creatorId,
-                    title
-                  }
-                }
-              }
+              id
             }
           }
         }
@@ -468,8 +364,6 @@ describe('GraphQL User', () => {
           checkRequestErrors(res);
 
           const userData = res.body.data.viewer.user;
-          const posts = userData.posts.edges;
-          expect(posts.length).to.equal(0);
 
           done();
 

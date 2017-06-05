@@ -31,7 +31,6 @@ function getAccountMenu (props) {
     return <MenuItem onClick={() => props.navigateTo('/login')}>Login</MenuItem>;
   }
   else {
-    const hasPosts = user.posts ? user.posts.edges.length > 0 : false;
     return (
       <span>
         <MenuItem
@@ -40,21 +39,6 @@ function getAccountMenu (props) {
           Profile
         </MenuItem>
 
-        <MenuItem
-          onClick={() => props.navigateTo('/user/post/create')}
-        >
-          Create Post
-        </MenuItem>
-
-        {
-          hasPosts ?
-            <MenuItem
-              onClick={() => props.navigateTo('/user/posts')}
-            >
-              My Posts
-            </MenuItem> :
-            undefined
-        }
 
         <MenuItem
           onClick={() => _logout(user)}
@@ -78,7 +62,6 @@ const Navigation = (props) => (
 
     <Divider />
 
-    <MenuItem onClick={() => props.navigateTo('/posts')}>Posts</MenuItem>
   </Drawer>
 );
 
@@ -89,9 +72,6 @@ export default Relay.createContainer(Navigation, {
         user {
           firstName,
           role,
-          posts (first: 1) {
-            edges
-          }
           ${LogoutMutation.getFragment('user')}
         }
       }

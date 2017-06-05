@@ -1,8 +1,6 @@
 export const ROLES = {
   anonymous: 'anonymous',
-  reader: 'user',
-  publisher: 'publisher',
-  admin: 'admin'
+  logged: 'user'
 };
 
 export const Errors = {

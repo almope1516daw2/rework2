@@ -21,10 +21,7 @@ export default class LoginMutation extends Relay.Mutation {
           email,
           role,
           firstName,
-          lastName,
-          posts (first: 1) {
-            edges
-          }
+          lastName
         }
       }
     `;
