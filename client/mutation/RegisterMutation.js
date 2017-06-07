@@ -12,6 +12,7 @@ export default class RegisterMutation extends Relay.Mutation {
       password: this.props.password,
       firstName: this.props.firstName,
       lastName: this.props.lastName,
+      image: this.props.image,
       role: this.props.role
     }
   }

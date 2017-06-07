@@ -22,10 +22,14 @@ export default new GraphQLObjectType({
       description: 'the users first name',
       type: GraphQLString
     },
-    lastName: {
-      description: 'the users last name',
-      type: GraphQLString
-    },
+      lastName: {
+          description: 'the users last name',
+          type: GraphQLString
+      },
+      image: {
+          description: 'the users image',
+          type: GraphQLString
+      },
     role: {
       description: 'the users role',
       type: GraphQLString

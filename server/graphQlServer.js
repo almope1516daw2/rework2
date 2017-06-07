@@ -51,7 +51,7 @@ export default function createGraphQlServer(port, database) {
     // Expose a GraphQL endpoint
     const graphQLServer = express();
 
-    mongoose.connect('mongodb://localhost:27017/test');
+    mongoose.connect('mongodb://192.168.99.100:32768/test');
 
     graphQLServer.use(cookieSession({
         name: 'session',

@@ -43,6 +43,7 @@ export class LoginPage extends React.Component {
           this.refs.form.updateInputsWithError(formError);
         },
         onSuccess: (response) => {
+            //this.context.router.push('/user')
           self.props.location.state ? self.context.router.push({}, self.props.location.state.previousPath) : self.context.router.goBack();
         }
       }
@@ -61,7 +62,7 @@ export class LoginPage extends React.Component {
     return (
       <div className={styles.content}>
         <h2>Login</h2>
-
+x
         <Formsy.Form
           ref="form"
           onSubmit={(model) => this.login(this.props.viewer.user, model)}

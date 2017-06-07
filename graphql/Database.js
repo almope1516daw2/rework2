@@ -31,19 +31,39 @@ export default class Database {
   }
 
   getUserWithCredentials(email, password) {
-    let found = false;
-    let tempUser;
-      UserMongo.findOne({mail: email}).exec((err, res) => {
-          if(res===null) {
-              console.log('caca');
-              throw new Error(Errors.WrongEmailOrPassword);
-          }
-          else {
-              console.log("USER FOUND: ");
-              console.log(res);
-              found = true;
-              tempUser = res;
-              return tempUser;
+      const user = this._copy(users.find(user => user.email === email && user.password !== password));
+      console.log("USER FROM CODE: ")
+      console.log(user);
+
+      if (!user) {
+          console.log("ERROR!! ")
+          throw new Error(Errors.WrongEmailOrPassword);
+      }
+
+      //user.userId = user.id;
+      //user.id = viewerId;
+      //return user;
+
+      return new Promise((resolve, reject) => {
+
+
+          UserMongo.findOne({mail: email}).exec((err, res) => {
+              if (res === null) {
+                  console.log('caca');
+                  throw new Error(Errors.WrongEmailOrPassword);
+              }
+              else {
+                  console.log("USER FROM DB: ");
+                  console.log(res);
+
+              }
+              err ? reject(err) : resolve(res);
+          });
+
+
+
+      });
+
               //tempUser = new User({res.mail, password, firstName, lastName, role});
              /* let tempMail = res.mail;
               let tempFirst = res.name;
@@ -54,8 +74,8 @@ export default class Database {
               console.log("TEMP USER: ")
               console.log(tempUser)*/
 
-          }
-      });
+          //}
+      //});
       //const user = this._copy(tempUser);
     //console.log(user);
 /*
@@ -75,17 +95,20 @@ export default class Database {
   }
 
   createUser(email, password, firstName, lastName, role) {
-    const existingUser = users.find(user => user.email == email);
 
+    const existingUser = users.find(user => user.email == email);
+    console.log("1");
     if (existingUser) {
-      throw new Error(Errors.EmailAlreadyTaken);
+      //throw new Error(Errors.EmailAlreadyTaken);
     }
 
+      console.log("2");
       let newUser = new UserMongo({
-          name: firstName,
-          surname: lastName,
-          mail: email,
-          image: 'preview.png'
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          image: 'preview.png',
+          role: 'user'
 
       });
 
@@ -95,7 +118,10 @@ export default class Database {
     users.push(newUser);*/
 
       return new Promise((resolve, reject) => {
+          console.log("3");
           newUser.save((err, res) => {
+              console.log("RES: ");
+              console.log(res);
               err ? reject(err) : resolve(res);
           });
       });

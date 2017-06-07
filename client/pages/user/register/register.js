@@ -2,8 +2,9 @@ import React from 'react';
 import Relay from 'react-relay';
 import validator from "validator";
 import * as ReactBootstrap from "react-bootstrap";
-//import FaEye from "react-icons/fa/eye";
-//import "../../../../styles.css";
+import pbkdf2 from "pbkdf2";
+import randomBytes from "randombytes";
+
 import RegisterMutation from '../../../mutation/RegisterMutation';
 import { ROLES, Errors } from '../../../../config';
 
@@ -23,15 +24,19 @@ export class RegisterPage extends React.Component {
           name: "",
           surname: "",
           mail: "",
-          password: "",
+          password: "asd",
           repeatPassword: "",
           hash: "",
           salt: "",
+          image: "",
           checkTerms: false,
           validFields: true,
           showModal: false,
           imgPreview: "imgPreview.png",
       };
+
+      this.state.salt = randomBytes(16).toString('hex');
+      this.state.hash = pbkdf2.pbkdf2Sync(this.state.password, this.state.salt, 1000, 64).toString('hex');
   }
 
     showModal = () => {
@@ -113,7 +118,10 @@ export class RegisterPage extends React.Component {
 
     saveRegister = () => {
 
-      this.resetErrorSpan();
+
+
+
+        this.resetErrorSpan();
       this.state.validFields = true;
       this.validateFields();
 
@@ -127,6 +135,7 @@ export class RegisterPage extends React.Component {
                   password: this.state.password,
                   firstName: this.state.name,
                   lastName: this.state.surname,
+                  image: this.state.image,
                   role: ROLES.logged,
                   user: null
               }),
@@ -145,7 +154,7 @@ export class RegisterPage extends React.Component {
                       this.refs.form.updateInputsWithError(formError);
                   },
                   onSuccess: (response) => {
-                      this.context.router.push('/login')
+                      this.context.router.push('/')
                   }
               }
           );

@@ -10,17 +10,21 @@ export function createAnonymousToken () {
 }
 
 export function createToken (userData) {
+  console.log("CREATE TOKEN USER DATA: ");
+  console.log(userData);
   if (userData && userData.userId) {
     const {userId, role} = userData;
     log('create token with userId ' + userId);
     return jwt.sign({userId, role}, secret);
   }
   else {
+    console.log("not token is created");
     return jwt.sign(ANONYMOUS_TOKEN_DATA, secret);
   }
 }
 
 export function decodeToken (token) {
+  console.log("DECODE");
   return jwt.verify(token, secret);
 }
 

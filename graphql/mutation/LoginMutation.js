@@ -28,12 +28,18 @@ export default mutationWithClientMutationId({
     const user = db.getUserWithCredentials(email, password);
     console.log("USER: ");
     console.log(user);
-    if (user) {
+      user.then(function(result) {
+          console.log(result) //will log results.
+          if (result) {
+              console.log("INSIDE IF USER ");
+              rootValue.session.token = createToken(result);
+              rootValue.tokenData = decodeToken(rootValue.session.token);
 
-      rootValue.session.token = createToken(user);
-      rootValue.tokenData = decodeToken(rootValue.session.token);
+          } else console.log("NO USER");
 
-    }
-    return user;
+          return result;
+      });
+
+
   }
 });

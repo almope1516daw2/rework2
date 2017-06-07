@@ -6,5 +6,6 @@ export default class User {
     this.role = fields.role;
     this.firstName = fields.firstName;
     this.lastName = fields.lastName;
+    this.image = fields.image;
   }
 };

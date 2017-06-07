@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 let userSchema = new mongoose.Schema({
-    id: {
+    userId: {
         type: String,
         required: true,
         unique: true,
@@ -26,7 +26,7 @@ let userSchema = new mongoose.Schema({
     },
     salt: String,
     hash: String,
-    type: String
+    role: String
 });
 
 userSchema.set('toJSON', {getters: true});

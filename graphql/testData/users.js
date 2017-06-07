@@ -13,7 +13,7 @@ const user1 = new User({
 const user2 = new User({
   id: '2',
   role: ROLES.logged,
-  email: 'publisher@test.com',
+  email: 'publisher@hotmail.com',
   password: 'qwerty',
   firstName: 'Peter',
   lastName: 'Publisher'
