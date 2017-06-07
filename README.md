@@ -1,3 +1,11 @@
+###########
+GETVIEWERBYID en DATABASE cambiar el user por el del la db
+
+
+
+
+
+
 An example app demonstrating role based authentication and file upload with Relay and GraphQL.
 
 - [Authentication](#authentication)
